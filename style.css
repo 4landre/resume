@@ -108,7 +108,7 @@ ol, ul, li {
     }
 }
 
-.nav.ulMenu {
+.nav .ulMenu {
     top: 100%;
     right: 0;
     display: none;
