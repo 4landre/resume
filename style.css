@@ -23,6 +23,61 @@ ol, ul, li {
     clear: both;
 }
 
+/* siteloading */
+
+.fsiteloading.active {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+    background: gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fsiteloading {
+    display: none;
+}
+
+.siteloading {
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.siteloading::after, .siteloading::before {
+    content: '';
+    border-radius: 50%;
+    background: black;
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    animation: s 1s linear infinite;
+}
+
+.siteloading::before {
+    animation-delay: 0.5s;
+}
+
+@keyframes s {
+    0% {
+        width: 0px;
+        height: 0px;
+        opacity: 1;
+    }
+    100% {
+        width: 100px;
+        height: 100px;
+        opacity: 0;
+    }
+}
+
 /* topNavBar */
 
 .topNavBar {
@@ -42,6 +97,7 @@ ol, ul, li {
     background: white;
     padding: 10px 16px;
     color: black;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
 }
 
 .topNavBar .logo {
