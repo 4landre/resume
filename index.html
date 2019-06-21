@@ -5,6 +5,7 @@
     <title>我的个人简历</title>
     <link rel="stylesheet" href="./style.css">
     <script src="https://at.alicdn.com/t/font_1118259_0h77d3fc8fof.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.4.0/Tween.js"></script>
     <style type="text/css">
         .icon {
             width: 1em;
@@ -56,7 +57,7 @@
         <div class="mask"></div>
     </div>
     <main>
-        <div id="siteAboutMe" class="mycard">
+        <div data-x id="siteAboutMe" class="mycard">
             <div class="aboutmeAndPicture clearfix">
                 <div class="picture">
                     <img src="https://rscard.px-lab.com/startuper/wp-content/uploads/sites/2/2015/11/startuper-1-299x347.jpg"
@@ -104,7 +105,7 @@
             <p class="me">我是田永吉，初级前端开发工程师，写代码使我快乐！</p>
         </div>
     </main>
-    <section id="siteSkills" class="skills">
+    <section data-x id="siteSkills" class="skills">
         <h1>技能</h1>
         <ol class="skillList clearfix">
             <li>HTML5 &amp; CSS3
@@ -114,17 +115,17 @@
             </li>
             <li>Javascript
                 <div class="skillbar">
-                    <div class="loading" style="width: 20%" ;></div>
+                    <div class="loading" style="width: 50%" ;></div>
                 </div>
             </li>
             <li>jQuary
                 <div class="skillbar">
-                    <div class="loading" style="width: 15%" ;></div>
+                    <div class="loading" style="width: 35%" ;></div>
                 </div>
             </li>
             <li>Vue
                 <div class="skillbar">
-                    <div class="loading" style="width: 10%" ;></div>
+                    <div class="loading" style="width: 20%" ;></div>
                 </div>
             </li>
             <li>React
@@ -134,12 +135,12 @@
             </li>
             <li>HTTP
                 <div class="skillbar">
-                    <div class="loading" style="width: 50%" ;></div>
+                    <div class="loading" style="width: 70%" ;></div>
                 </div>
             </li>
         </ol>
     </section>
-    <section id="siteWorks" class="portfolio">
+    <section data-x id="siteWorks" class="portfolio">
         <h1>作品集</h1>
         <nav>
             <ol class="clearfix">
@@ -165,13 +166,25 @@
                     alt="small">
             </div>
         </div>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
         <script>
-            //siteloading
+            //网站载入效果
             setTimeout(function () {
                 fsiteloading.classList.remove('active')
-            }, 3000)
+            }, 1000)
+
+            //弹出效果
+            let specialTag = document.querySelectorAll('[data-x]')
+            for (let i = 0; i < specialTag.length; i++) {
+                specialTag[i].classList.add('offset')
+            }
+            //第一项弹出设定
+            var startID = document.getElementById('siteAboutMe')
+            setTimeout(function () {
+                startID.classList.remove('offset')
+            }, 1000);
+
             //topNavBar变换
             window.onscroll = function () {
                 if (scrollY > 0) {
@@ -180,18 +193,43 @@
                 else {
                     topNavBarStick.classList.remove('active')
                 }
+
+                //所视视口导航栏选定效果
+                //1.获取滚动三项数据
+                let specialTag = document.querySelectorAll('[data-x]')
+                let s = []
+                for (let i = 0; i < specialTag.length; i++) {
+                    s[i] = Math.abs(specialTag[i].offsetTop - window.scrollY)
+
+                }
+                //2.对比数据选出离得最近的
+                var min = 0
+                for (let i = 0; i < specialTag.length - 1; i++) {
+                    if (s[min] > s[i + 1]) {
+                        min = i + 1
+                    }
+                }
+
+                specialTag[min].classList.remove('offset') //弹出效果
+                
+                //3.找到min对应的元素并添加class
+                let id = specialTag[min].id
+                let highLightA = document.querySelector('.nav ul li a[href="#' + id + '"]')
+                let highLightLi = highLightA.parentNode
+                let AllLi = highLightLi.parentNode
+                let brothersAndHLLi = AllLi.children
+                for (let i = 0; i < brothersAndHLLi.length; i++) {
+                    brothersAndHLLi[i].classList.remove('highlight')
+                }
+                highLightLi.classList.add('highlight')
+
+                if (s[min] > 500) {
+                    highLightLi.classList.remove('highlight')
+                }
+
             }
-            //自己想的版本
-            // let liTags = document.getElementsByClassName('navMenu')
-            // for (let i = 0; i < liTags.length; i++) {
-            //     liTags[i].onmouseenter = function () {
-            //         liTags[i].classList.add('active')
-            //     }
-            //     liTags[i].onmouseleave = function () {
-            //         liTags[i].classList.remove('active')
-            //     }
-            // 
-            //导航菜单
+
+            //导航菜单效果
             let liTags = document.querySelectorAll('.nav ul li')
             for (let i = 0; i < liTags.length; i++) {
                 liTags[i].onmouseenter = function () {
@@ -201,17 +239,38 @@
                     liTags[i].classList.remove('active')
                 }
             }
+
             //导航跳转
             let aTags = document.querySelectorAll('.nav ul li a')
-            for (let i = 0; i < aTags.length; i++)
+            for (let i = 0; i < aTags.length; i++) {
                 aTags[i].onclick = function (x) {
                     x.preventDefault()
                     let a = aTags[i]
                     let href = a.getAttribute('href')
                     let element = document.querySelector(href)
-                    let top = element.offsetTop
-                    window.scrollTo(0, top - 65)
+                    let targetTop = element.offsetTop - 65
+                    let currentTop = window.scrollY
+                    let t = Math.abs(targetTop - currentTop) / 100 * 300
+                    if (t > 500) {
+                        t = 500
+                    }
+                    //tween
+                    function animate(time) {
+                        requestAnimationFrame(animate);
+                        TWEEN.update(time);
+                    }
+                    requestAnimationFrame(animate);
+
+                    var coords = { y: currentTop }; // 起始点 (0, 0)
+                    var tween = new TWEEN.Tween(coords) // 创建一个新的tween用来改变 'coords'
+                        .to({ y: targetTop }, t) // 在1s内移动至 (300, 200)
+                        .easing(TWEEN.Easing.Quadratic.InOut) // 使用缓动功能使的动画更加平滑
+                        .onUpdate(function () { // 在 tween.js 更新 'coords' 后调用
+                            window.scrollTo(0, coords.y)
+                        })
+                        .start(); // 立即开始 tween
                 }
+            }
 
         </script>
     </section>
